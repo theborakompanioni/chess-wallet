@@ -2,6 +2,15 @@
   "name": "chess-bitcoin-wallet",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "prettier --check --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
+    "format": "prettier --write --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
+    "postinstall": "node patch.js"
+  },
   "dependencies": {
     "@alephium/noble-secp256k1": "^1.5.5",
     "@noble/secp256k1": "^1.5.5",
@@ -22,14 +31,8 @@
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "prettier --check --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
-    "format": "prettier --write --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
-    "postinstall": "node patch.js"
+  "devDependencies": {
+    "prettier": "^2.6.2"
   },
   "eslintConfig": {
     "extends": [
@@ -49,7 +52,9 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "prettier": "^2.6.2"
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true
   }
 }
