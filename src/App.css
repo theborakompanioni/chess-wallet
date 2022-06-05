@@ -18,14 +18,22 @@ hr {
   border: 1px solid #999;
 }
 
-.App-header {
-  min-height: 100vh;
+.App-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin-bottom: 4rem;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
 }
 
 .App-link {
@@ -40,6 +48,22 @@ hr {
 
 .code-container code {
   font-family: 'Courier New', monospace;
+}
+
+.mnemonic {
+  padding: 1rem;
+}
+
+.mnemonic-word {
+  color: #999;
+}
+
+.mnemonic-word .highlight {
+  color: #fefefe;
+}
+
+.bitlength-selector {
+  padding: 0.25rem 0 0.25rem 0.5rem;
 }
 
 /*

@@ -3,6 +3,6 @@ import App from './App';
 
 test('renders App heading', () => {
   render(<App />);
-  const linkElement = screen.getByText('Chess Bitcoin wallet');
+  const linkElement = screen.getByText('Bitcoin Chess Wallet');
   expect(linkElement).toBeInTheDocument();
 });

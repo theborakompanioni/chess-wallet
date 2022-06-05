@@ -45,7 +45,8 @@ type Base13 = string
 const toFenAlphabetString = (fen: cg.FEN): string => {
   // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", corresponding to the number of squares.
   // This must be translated to the alphabet and replaced with "." * {digit} number of times.
-  return [1, 2, 3, 4, 5, 6, 7, 8].reduce((acc, noOfEmptySquares) => {
+  return [1, 2, 3, 4, 5, 6, 7, 8]
+    .reduce((acc, noOfEmptySquares) => {
       return acc.replaceAll(`${noOfEmptySquares}`, Array(noOfEmptySquares).fill('.').join(''))
     }, fen)
     .replaceAll('/', '')
@@ -70,11 +71,11 @@ const fenToBase16 = (fen: cg.FEN): Base16 => {
 const fenToBase13 = (fen: cg.FEN): Base13 => {
   const fenAlphabetString = toFenAlphabetString(fen)
 
-  const base13String = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
+  const base13 = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
     return acc.replaceAll(key, value)
   }, fenAlphabetString)
 
-  return base13String
+  return base13
 }
 
 const base13ToFen = (base13: Base13): cg.FEN => {
@@ -85,7 +86,10 @@ const base13ToFen = (base13: Base13): cg.FEN => {
     return acc.replaceAll(value, key)
   }, base13)
 
-  const protoFen = fenAlphabetString.match(/(.{1,8})/g)!.join('/').substring(0, 8 * 8 + 7)
+  const protoFen = fenAlphabetString
+    .match(/(.{1,8})/g)!
+    .join('/')
+    .substring(0, 8 * 8 + 7)
 
   const fen = [8, 7, 6, 5, 4, 3, 2, 1].reduce((acc, noOfEmptySquares) => {
     return acc.replaceAll(Array(noOfEmptySquares).fill('.').join(''), `${noOfEmptySquares}`)
@@ -100,7 +104,7 @@ const randomFen = () => {
 }
 
 interface BitLength {
-  bits: number,
+  bits: number
   enabled: boolean
 }
 const toBitLength = (bits: number, enabled: boolean = true): BitLength => ({ bits, enabled })
@@ -123,16 +127,24 @@ const BitLengthSelector = ({ bitLengths, onChange }: BitLengthSelectorProps) => 
     onChange(bitLength)
   }, [bitLength])
 
-  return <>
-    <select value={bitLength.bits} onChange={_onChange}>
-      <>
-        {bitLengths.map((it) => {
-          return <option key={it.bits} value={it.bits} disabled={!it.enabled}>{Math.ceil(it.bits / 11)} words ({it.bits} bits)</option>
-        })}
-      </>
-    </select>
-  </>
+  return (
+    <>
+      <select className="bitlength-selector" value={bitLength.bits} onChange={_onChange}>
+        <>
+          {bitLengths.map((it) => {
+            return (
+              <option key={it.bits} value={it.bits} disabled={!it.enabled}>
+                {Math.ceil(it.bits / 11)} words ({it.bits} bits)
+              </option>
+            )
+          })}
+        </>
+      </select>
+    </>
+  )
 }
+
+const START_FEN: cg.FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
 function App() {
   const groundRef = useRef<HTMLDivElement>(null)
@@ -141,27 +153,37 @@ function App() {
   const increaseChangeCounter = useCallback(() => setChangeCounter((current) => current + 1), [])
 
   const bitLengths = useState<BitLength[]>([
-    toBitLength(128), 
-    toBitLength(160), 
-    toBitLength(192), 
-    toBitLength(224), 
-    toBitLength(256, false)
-    ])[0]
+    toBitLength(128),
+    toBitLength(160),
+    toBitLength(192),
+    toBitLength(224),
+    toBitLength(256, false),
+  ])[0]
   const [bitLength, setBitLength] = useState<BitLength | null>(null)
 
-  const initialFen = useMemo<cg.FEN | undefined>(() => randomFen(), [])
-  const fen = useMemo<cg.FEN | null>(() => changeCounter >= 0 && ground ? ground.getFen() : null, [ground, changeCounter])
+  const [initialFen, setInitialFen] = useState<cg.FEN>(randomFen())
+  const fen = useMemo<cg.FEN | null>(
+    () => (changeCounter >= 0 && ground ? ground.getFen() : null),
+    [ground, changeCounter]
+  )
 
   const fen16 = useMemo<cg.FEN | null>(() => fen && fenToBase16(fen), [fen])
   const fen16Hash = useMemo(() => fen16 && toSha256(base16ToIntArray(fen16)), [fen16])
-  const entropy = useMemo<string | null>(() => fen16Hash && bitLength && fen16Hash.substring(fen16Hash.length - (bitLength.bits / 4)), [fen16Hash, bitLength])
+  const entropy = useMemo<string | null>(
+    () => fen16Hash && bitLength && fen16Hash.substring(fen16Hash.length - bitLength.bits / 4),
+    [fen16Hash, bitLength]
+  )
 
-  const mnemonic = useMemo(() => entropy && BIP39.entropyToMnemonic(entropy), [entropy])
-  const seed = useMemo(() => mnemonic && BIP39.mnemonicToSeedSync(mnemonic), [mnemonic])
+  const mnemonic = useMemo<string | null>(() => entropy && BIP39.entropyToMnemonic(entropy), [entropy])
+  const words = useMemo<string[] | null>(() => mnemonic ? mnemonic.split(' ') : null, [mnemonic])
+  const seed = useMemo<Buffer | null>(() => mnemonic ? BIP39.mnemonicToSeedSync(mnemonic) : null, [mnemonic])
 
   const onChange = useCallback(() => {
     increaseChangeCounter()
   }, [increaseChangeCounter])
+
+  const shuffleFen = () => setInitialFen(randomFen())
+  const startFen = () => setInitialFen(START_FEN)
 
   const config = useMemo(
     () => ({
@@ -186,7 +208,7 @@ function App() {
   useEffect(() => {
     if (!groundRef || !groundRef.current) return
 
-    const configWithFen = { ...config, fen: initialFen}
+    const configWithFen = { ...config, fen: initialFen }
 
     const ground = Chessground(groundRef.current, configWithFen)
     setGround(ground)
@@ -197,38 +219,48 @@ function App() {
   }, [initialFen, groundRef, config])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Chess Bitcoin wallet</h1>
+    <div className="App min-w-xs">
+      <header className="App-container">
+        <h1>Bitcoin Chess Wallet</h1>
         <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
-
-        <h2>FEN:</h2>
-        <p>{fen}</p>
+        
+        <div className="mt-1">
+          <button type="button" className="btn" onClick={() => shuffleFen()}>Shuffle</button>
+          <button type="button" className="btn ml-1" onClick={() => startFen()}>Start</button>
+        </div>
 
         <h2>Your seed:</h2>
-        <p>{mnemonic}</p>
         <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
+        <p className="mnemonic mono">{words?.map((it, index) => <>
+          <span key={index} className="mnemonic-word">
+            <span className="highlight">{it.substring(0, 4)}</span>{it.length > 4 && it.substring(4, it.length)}{' '}</span>
+        </>)}
+        </p>
 
-        <h2>Seed hash:</h2>
-        <div className="code-container">
-          <code>{seed}</code>
-        </div>
+        <span className={`details-container d-none`}>
+          <h2>FEN:</h2>
+          <p>{fen}</p>
 
-        <h2>FEN13:</h2>
-        <div className="code-container">
-          <code>{fen && fenToBase13(fen)}</code>
-        </div>
+          <h2>FEN13:</h2>
+          <div className="code-container">
+            <code>{fen && fenToBase13(fen)}</code>
+          </div>
 
-        <h2>FEN16:</h2>
-        <div className="code-container">
-          <code>{fen && fenToBase16(fen)}</code>
-        </div>
+          <h2>FEN16:</h2>
+          <div className="code-container">
+            <code>{fen && fenToBase16(fen)}</code>
+          </div>
 
-        <hr />
+          <h2>Entropy:</h2>
+          <div className="code-container">
+            <code>{entropy}</code>
+          </div>
 
-        <div className="code-container">
-          <code>{entropy}</code>
-        </div>
+          <h2>Seed:</h2>
+          <div className="code-container">
+            <code>{seed}</code>
+          </div>
+        </span>
       </header>
     </div>
   )
