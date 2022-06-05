@@ -9,14 +9,15 @@ import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
 
 import { sha256 } from '@noble/hashes/sha256'
+import { hexToBytes } from '@noble/hashes/utils'
 
 import * as utils from './utils'
 import './App.css'
 
 window.Buffer = Buffer
 
-export const toSha256 = (data: string | Uint8Array): string => {
-  let eventHash = sha256.create().update(Buffer.from(data)).digest()
+export const toSha256 = (data: Uint8Array): string => {
+  let eventHash = sha256.create().update(data).digest()
   return Buffer.from(eventHash).toString('hex')
 }
 
@@ -48,15 +49,9 @@ const toFenAlphabetString = (fen: cg.FEN): string => {
     .replaceAll('/', '')
 }
 
-const fenToBuffer = (fen: cg.FEN): Buffer => {
-  const base16 = fenToBase16(fen)
-  const hex = base16.length % 2 === 0 ? base16 : `0${base16}`
-  return Buffer.from(hex, 'hex')
-}
-
 const base16ToIntArray = (base16: string): Uint8Array => {
   const hex = base16.length % 2 === 0 ? base16 : `0${base16}`
-  return Uint8Array.from(hex.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16)))
+  return hexToBytes(hex)
 }
 
 const fenToBase16 = (fen: cg.FEN): string => {
