@@ -9,7 +9,7 @@ import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
 
 import { sha256 } from '@noble/hashes/sha256'
-import { hexToBytes } from '@noble/hashes/utils'
+import { hexToBytes, bytesToHex, randomBytes } from '@noble/hashes/utils'
 
 import * as utils from './utils'
 import './App.css'
@@ -39,27 +39,35 @@ const FEN_ALPHABET = {
   K: 'c',
 }
 
+type Base16 = string
+type Base13 = string
+
 const toFenAlphabetString = (fen: cg.FEN): string => {
   // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", corresponding to the number of squares.
   // This must be translated to the alphabet and replaced with "." * {digit} number of times.
-  return [1, 2, 3, 4, 5, 6, 7, 8]
-    .reduce((acc, noOfEmptySquares) => {
+  return [1, 2, 3, 4, 5, 6, 7, 8].reduce((acc, noOfEmptySquares) => {
       return acc.replaceAll(`${noOfEmptySquares}`, Array(noOfEmptySquares).fill('.').join(''))
     }, fen)
     .replaceAll('/', '')
 }
 
-const base16ToIntArray = (base16: string): Uint8Array => {
+const base16ToIntArray = (base16: Base16): Uint8Array => {
   const hex = base16.length % 2 === 0 ? base16 : `0${base16}`
   return hexToBytes(hex)
 }
 
-const fenToBase16 = (fen: cg.FEN): string => {
-  const base13String = fenToBase13(fen)
-  return utils.convertBaseBigInt(base13String, 13, 16)
+const base13ToBase16 = (base13: Base13): Base16 => {
+  return utils.convertBaseBigInt(base13, 13, 16)
+}
+const base16ToBase13 = (base16: Base16): Base13 => {
+  return utils.convertBaseBigInt(base16, 16, 13)
 }
 
-const fenToBase13 = (fen: cg.FEN): string => {
+const fenToBase16 = (fen: cg.FEN): Base16 => {
+  return base13ToBase16(fenToBase13(fen))
+}
+
+const fenToBase13 = (fen: cg.FEN): Base13 => {
   const fenAlphabetString = toFenAlphabetString(fen)
 
   const base13String = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
@@ -67,6 +75,28 @@ const fenToBase13 = (fen: cg.FEN): string => {
   }, fenAlphabetString)
 
   return base13String
+}
+
+const base13ToFen = (base13: Base13): cg.FEN => {
+  if (base13.length != 64) {
+    throw new Error('base13 value must have 64 chars to be turned into fen')
+  }
+  const fenAlphabetString = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
+    return acc.replaceAll(value, key)
+  }, base13)
+
+  const protoFen = fenAlphabetString.match(/(.{1,8})/g)!.join('/').substring(0, 8 * 8 + 7)
+
+  const fen = [8, 7, 6, 5, 4, 3, 2, 1].reduce((acc, noOfEmptySquares) => {
+    return acc.replaceAll(Array(noOfEmptySquares).fill('.').join(''), `${noOfEmptySquares}`)
+  }, protoFen)
+
+  return fen
+}
+
+const randomFen = () => {
+  const randomBase13 = base16ToBase13(bytesToHex(randomBytes(32))).substring(0, 64)
+  return base13ToFen(randomBase13)
 }
 
 interface BitLength {
@@ -119,7 +149,7 @@ function App() {
     ])[0]
   const [bitLength, setBitLength] = useState<BitLength | null>(null)
 
-  const initialFen = useMemo<cg.FEN | undefined>(() => undefined, [])
+  const initialFen = useMemo<cg.FEN | undefined>(() => randomFen(), [])
   const fen = useMemo<cg.FEN | null>(() => changeCounter >= 0 && ground ? ground.getFen() : null, [ground, changeCounter])
 
   const fen16 = useMemo<cg.FEN | null>(() => fen && fenToBase16(fen), [fen])
