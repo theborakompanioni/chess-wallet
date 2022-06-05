@@ -17,8 +17,8 @@ import './App.css'
 window.Buffer = Buffer
 
 export const toSha256 = (data: Uint8Array): string => {
-  let eventHash = sha256.create().update(data).digest()
-  return Buffer.from(eventHash).toString('hex')
+  const hash = sha256.create().update(data).digest()
+  return bytesToHex(hash)
 }
 
 // empty = ".", pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
@@ -60,6 +60,7 @@ const base16ToIntArray = (base16: Base16): Uint8Array => {
 const base13ToBase16 = (base13: Base13): Base16 => {
   return utils.convertBaseBigInt(base13, 13, 16)
 }
+
 const base16ToBase13 = (base16: Base16): Base13 => {
   return utils.convertBaseBigInt(base16, 16, 13)
 }
@@ -99,8 +100,10 @@ const base13ToFen = (base13: Base13): cg.FEN => {
 }
 
 const randomFen = () => {
-  const randomBase13 = base16ToBase13(bytesToHex(randomBytes(32))).substring(0, 64)
-  return base13ToFen(randomBase13)
+  const random = randomBytes(32)
+  const randomBase16 = bytesToHex(random)
+  const randomBase13 = base16ToBase13(randomBase16)
+  return base13ToFen(randomBase13.substring(randomBase13.length - 64))
 }
 
 interface BitLength {
@@ -161,7 +164,7 @@ function App() {
   ])[0]
   const [bitLength, setBitLength] = useState<BitLength | null>(null)
 
-  const [initialFen, setInitialFen] = useState<cg.FEN>(randomFen())
+  const [initialFen, setInitialFen] = useState<cg.FEN | null>(null)
   const fen = useMemo<cg.FEN | null>(
     () => (changeCounter >= 0 && ground ? ground.getFen() : null),
     [ground, changeCounter]
@@ -175,8 +178,8 @@ function App() {
   )
 
   const mnemonic = useMemo<string | null>(() => entropy && BIP39.entropyToMnemonic(entropy), [entropy])
-  const words = useMemo<string[] | null>(() => mnemonic ? mnemonic.split(' ') : null, [mnemonic])
-  const seed = useMemo<Buffer | null>(() => mnemonic ? BIP39.mnemonicToSeedSync(mnemonic) : null, [mnemonic])
+  const words = useMemo<string[] | null>(() => (mnemonic ? mnemonic.split(' ') : null), [mnemonic])
+  const seed = useMemo<Buffer | null>(() => (mnemonic ? BIP39.mnemonicToSeedSync(mnemonic) : null), [mnemonic])
 
   const onChange = useCallback(() => {
     increaseChangeCounter()
@@ -208,7 +211,8 @@ function App() {
   useEffect(() => {
     if (!groundRef || !groundRef.current) return
 
-    const configWithFen = { ...config, fen: initialFen }
+    const fen = initialFen || randomFen()
+    const configWithFen = { ...config, fen }
 
     const ground = Chessground(groundRef.current, configWithFen)
     setGround(ground)
@@ -223,21 +227,28 @@ function App() {
       <header className="App-container">
         <h1>Bitcoin Chess Wallet</h1>
         <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
-        
+
         <div className="mt-1">
-          <button type="button" className="btn" onClick={() => shuffleFen()}>Shuffle</button>
-          <button type="button" className="btn ml-1" onClick={() => startFen()}>Start</button>
+          <button type="button" className="btn" onClick={() => shuffleFen()}>
+            Shuffle
+          </button>
+          <button type="button" className="btn ml-1" onClick={() => startFen()}>
+            Start
+          </button>
         </div>
 
         <h2>Your seed:</h2>
         <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
-        <p className="mnemonic mono">{words?.map((it, index) => <>
-          <span key={index} className="mnemonic-word">
-            <span className="highlight">{it.substring(0, 4)}</span>{it.length > 4 && it.substring(4, it.length)}{' '}</span>
-        </>)}
+        <p className="mnemonic mono">
+          {words?.map((it, index) => (
+            <span key={index} className="mnemonic-word">
+              <span className="highlight">{it.substring(0, 4)}</span>
+              {it.length > 4 && it.substring(4, it.length)}{' '}
+            </span>
+          ))}
         </p>
 
-        <span className={`details-container d-none`}>
+        <span className={`details-container`}>
           <h2>FEN:</h2>
           <p>{fen}</p>
 
