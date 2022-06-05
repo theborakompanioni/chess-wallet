@@ -1,3 +1,17 @@
+import { sha256 } from '@noble/hashes/sha256'
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils'
+
+export type Base13 = string
+export type Base16 = string
+export type Hex = Base16
+
+export const toSha256 = (data: Uint8Array): Hex => {
+  const hash = sha256.create().update(data).digest()
+  return bytesToHex(hash)
+}
+
+export const reverseString = (val: string): string => val.split('').reverse().join('')
+
 const bigIntPow = (() => {
   const ZERO = BigInt(0)
   const TWO = BigInt(2)
@@ -10,7 +24,7 @@ const bigIntPow = (() => {
   }
 })()
 
-export const convertBaseBigInt = (() => {
+const convertBaseBigInt = (() => {
   const RANGE = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
 
   return (value: string, from_base: number, to_base: number) => {
@@ -43,3 +57,12 @@ export const convertBaseBigInt = (() => {
     return new_value || '0'
   }
 })()
+
+export const base16ToIntArray = (base16: Base16): Uint8Array => {
+  const hex = base16.length % 2 === 0 ? base16 : `0${base16}`
+  return hexToBytes(hex)
+}
+
+export const base13ToBase16 = (base13: Base13): Base16 => convertBaseBigInt(base13, 13, 16)
+
+export const base16ToBase13 = (base16: Base16): Base13 => convertBaseBigInt(base16, 16, 13)

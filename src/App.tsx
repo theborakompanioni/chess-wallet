@@ -4,108 +4,15 @@ import * as BIP39 from 'bip39'
 import { Chessground } from 'chessground'
 import { Api as ChessgroundApi } from 'chessground/api'
 import * as cg from 'chessground/types'
+
+import { START_FEN, randomFen, fenToBase13, fenToBase16, fenToSha256 } from './fen'
+
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
-
-import { sha256 } from '@noble/hashes/sha256'
-import { hexToBytes, bytesToHex, randomBytes } from '@noble/hashes/utils'
-
-import * as utils from './utils'
 import './App.css'
 
 window.Buffer = Buffer
-
-export const toSha256 = (data: Uint8Array): string => {
-  const hash = sha256.create().update(data).digest()
-  return bytesToHex(hash)
-}
-
-// empty = ".", pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
-// White pieces are designated using uppercase letters ("PNBRQK"), while black pieces use lowercase letters ("pnbrqk").
-const FEN_ALPHABET = {
-  '.': '0',
-  p: '1',
-  n: '2',
-  b: '3', // note: "b" is a valid hex char
-  r: '4',
-  q: '5',
-  k: '6',
-  P: '7',
-  N: '8',
-  B: '9',
-  R: 'a',
-  Q: 'b',
-  K: 'c',
-}
-
-type Base16 = string
-type Base13 = string
-
-const toFenAlphabetString = (fen: cg.FEN): string => {
-  // A set of one or more consecutive empty squares within a rank is denoted by a digit from "1" to "8", corresponding to the number of squares.
-  // This must be translated to the alphabet and replaced with "." * {digit} number of times.
-  return [1, 2, 3, 4, 5, 6, 7, 8]
-    .reduce((acc, noOfEmptySquares) => {
-      return acc.replaceAll(`${noOfEmptySquares}`, Array(noOfEmptySquares).fill('.').join(''))
-    }, fen)
-    .replaceAll('/', '')
-}
-
-const base16ToIntArray = (base16: Base16): Uint8Array => {
-  const hex = base16.length % 2 === 0 ? base16 : `0${base16}`
-  return hexToBytes(hex)
-}
-
-const base13ToBase16 = (base13: Base13): Base16 => {
-  return utils.convertBaseBigInt(base13, 13, 16)
-}
-
-const base16ToBase13 = (base16: Base16): Base13 => {
-  return utils.convertBaseBigInt(base16, 16, 13)
-}
-
-const fenToBase16 = (fen: cg.FEN): Base16 => {
-  return base13ToBase16(fenToBase13(fen))
-}
-
-const fenToBase13 = (fen: cg.FEN): Base13 => {
-  const fenAlphabetString = toFenAlphabetString(fen)
-
-  const base13 = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
-    return acc.replaceAll(key, value)
-  }, fenAlphabetString)
-
-  return base13
-}
-
-const base13ToFen = (base13: Base13): cg.FEN => {
-  if (base13.length !== 64) {
-    throw new Error('base13 value must have 64 chars to be turned into fen')
-  }
-  // reverse is important! as "b" (black bishop)
-  const fenAlphabetString = Object.entries(FEN_ALPHABET).reverse().reduce((acc, [key, value]) => {
-    return acc.replaceAll(value, key)
-  }, base13)
-
-  const protoFen = fenAlphabetString
-    .match(/(.{1,8})/g)!
-    .join('/')
-    .substring(0, 8 * 8 + 7)
-
-  const fen = [8, 7, 6, 5, 4, 3, 2, 1].reduce((acc, noOfEmptySquares) => {
-    return acc.replaceAll(Array(noOfEmptySquares).fill('.').join(''), `${noOfEmptySquares}`)
-  }, protoFen)
-
-  return fen
-}
-
-const randomFen = () => {
-  const random = randomBytes(32)
-  const randomBase16 = bytesToHex(random)
-  const randomBase13 = base16ToBase13(randomBase16)
-  return base13ToFen(randomBase13.substring(randomBase13.length - 64))
-}
 
 interface BitLength {
   bits: number
@@ -148,8 +55,6 @@ const BitLengthSelector = ({ bitLengths, onChange }: BitLengthSelectorProps) => 
   )
 }
 
-const START_FEN: cg.FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-
 function App() {
   const groundRef = useRef<HTMLDivElement>(null)
   const [ground, setGround] = useState<ChessgroundApi | null>(null)
@@ -171,8 +76,7 @@ function App() {
     [ground, changeCounter]
   )
 
-  const fen16 = useMemo<cg.FEN | null>(() => fen && fenToBase16(fen), [fen])
-  const fen16Hash = useMemo(() => fen16 && toSha256(base16ToIntArray(fen16)), [fen16])
+  const fen16Hash = useMemo(() => fen && fenToSha256(fen), [fen])
   const entropy = useMemo<string | null>(
     () => fen16Hash && bitLength && fen16Hash.substring(fen16Hash.length - bitLength.bits / 4),
     [fen16Hash, bitLength]
@@ -244,7 +148,8 @@ function App() {
           {words?.map((it, index) => (
             <span key={index} className="mnemonic-word">
               <span className="highlight">{it.substring(0, 4)}</span>
-              {it.length > 4 && it.substring(4, it.length)}{' '}
+              {it.length > 4 && it.substring(4, it.length)}
+              {index === words.length - 1 ? '' : ' '}
             </span>
           ))}
         </p>
