@@ -27,7 +27,7 @@ const FEN_ALPHABET = {
   '.': '0',
   p: '1',
   n: '2',
-  b: '3',
+  b: '3', // note: "b" is a valid hex char
   r: '4',
   q: '5',
   k: '6',
@@ -80,10 +80,11 @@ const fenToBase13 = (fen: cg.FEN): Base13 => {
 }
 
 const base13ToFen = (base13: Base13): cg.FEN => {
-  if (base13.length != 64) {
+  if (base13.length !== 64) {
     throw new Error('base13 value must have 64 chars to be turned into fen')
   }
-  const fenAlphabetString = Object.entries(FEN_ALPHABET).reduce((acc, [key, value]) => {
+  // reverse is important! as "b" (black bishop)
+  const fenAlphabetString = Object.entries(FEN_ALPHABET).reverse().reduce((acc, [key, value]) => {
     return acc.replaceAll(value, key)
   }, base13)
 
@@ -128,7 +129,7 @@ const BitLengthSelector = ({ bitLengths, onChange }: BitLengthSelectorProps) => 
 
   useEffect(() => {
     onChange(bitLength)
-  }, [bitLength])
+  }, [onChange, bitLength])
 
   return (
     <>

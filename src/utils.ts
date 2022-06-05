@@ -29,7 +29,7 @@ export const convertBaseBigInt = (() => {
       .split('')
       .reverse()
       .reduce((carry, digit, index) => {
-        let fromIndex = from_range.indexOf(digit)
+        const fromIndex = from_range.indexOf(digit)
         if (fromIndex === -1) throw new Error(`Invalid digit ${digit} for base ${from_base}.`)
 
         return carry + BigInt(fromIndex) * bigIntPow(from_base_big, BigInt(index))
