@@ -142,8 +142,11 @@ function App() {
           </button>
         </div>
 
+        <div className="mt-1">
+          <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
+        </div>
+
         <h2>Your seed:</h2>
-        <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
         <p className="mnemonic mono">
           {words?.map((it, index) => (
             <span key={index} className="mnemonic-word">
