@@ -90,7 +90,7 @@ function App() {
     increaseChangeCounter()
   }, [increaseChangeCounter])
 
-  const shuffleFen = () => setInitialFen(randomFen())
+  const randomizeFen = () => setInitialFen(randomFen())
   const startFen = () => setInitialFen(START_FEN)
 
   const config = useMemo(
@@ -137,8 +137,8 @@ function App() {
         <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
 
         <div className="mt-1">
-          <button type="button" className="btn" onClick={() => shuffleFen()}>
-            Shuffle
+          <button type="button" className="btn" onClick={() => randomizeFen()}>
+            New
           </button>
           <button type="button" className="btn ml-1" onClick={() => startFen()}>
             Start
