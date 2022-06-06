@@ -6,6 +6,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#forkme {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 20;
+}
+
+@media only screen and (max-width: 600px) {
+  #forkme {
+    width: 120px;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: #999;
+  text-decoration: underline;
+}
+
 code,
 .mono {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;

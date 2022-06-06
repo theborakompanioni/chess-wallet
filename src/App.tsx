@@ -129,6 +129,9 @@ function App() {
 
   return (
     <div className="App min-w-xs">
+      <a href="https://github.com/theborakompanioni/chess-wallet">
+        <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
+      </a>
       <header className="App-container">
         <h1>Bitcoin Chess Wallet</h1>
         <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
@@ -146,18 +149,20 @@ function App() {
           <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
         </div>
 
-        <h2>Your seed:</h2>
-        <p className="mnemonic mono">
-          {words?.map((it, index) => (
-            <span key={index} className="mnemonic-word">
-              <span className="highlight">{it.substring(0, 4)}</span>
-              {it.length > 4 && it.substring(4, it.length)}
-              {index === words.length - 1 ? '' : ' '}
-            </span>
-          ))}
-        </p>
+        <div className="mt-1">
+          <h2>Your seed:</h2>
+          <p className="mnemonic mono">
+            {words?.map((it, index) => (
+              <span key={index} className="mnemonic-word">
+                <span className="highlight">{it.substring(0, 4)}</span>
+                {it.length > 4 && it.substring(4, it.length)}
+                {index === words.length - 1 ? '' : ' '}
+              </span>
+            ))}
+          </p>
+        </div>
 
-        <span className={`details-container`}>
+        <div className={`details-container d-none`}>
           <h2>FEN:</h2>
           <p>{fen}</p>
 
@@ -180,7 +185,14 @@ function App() {
           <div className="code-container">
             <code>{seed}</code>
           </div>
-        </span>
+        </div>
+
+        <div className="mt-1">
+          <h2>Contribute</h2>
+          <p>
+            Fork me on <a href="https://github.com/theborakompanioni/chess-wallet">GitHub</a>
+          </p>
+        </div>
       </header>
     </div>
   )
