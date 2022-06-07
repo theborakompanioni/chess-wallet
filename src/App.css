@@ -26,7 +26,7 @@ hr {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1.5vmin);
   color: white;
   margin-bottom: 2rem;
 }
@@ -54,7 +54,8 @@ hr {
 }
 
 .mnemonic {
-  padding: 1rem;
+  padding: 0 1rem;
+  font-size: calc(21px + 1.5vmin);
 }
 
 .mnemonic-word {
@@ -69,24 +70,29 @@ hr {
   padding: 0.25rem 0 0.25rem 0.5rem;
 }
 
-/*
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Chessground adaptions */
+cg-board {
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* prevent gap on the right when stretching board to 100% width */
+.cg-wrap coords.ranks {
+  top: unset !important;
+  left: unset !important;
+  overflow: hidden;
+}
+.cg-wrap coords.ranks coord {
+  transform: unset !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cg-wrap coords.files {
+  left: unset !important;
+  overflow: hidden;
 }
-*/
+.cg-wrap coords.files coord {
+  transform: translateX(39%);
+}
+/* prevent gap on the right when stretching board to 100% width - end */
+
+/* Chessground adaptions - end */

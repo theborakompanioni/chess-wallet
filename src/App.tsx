@@ -127,16 +127,16 @@ function App() {
     }
   }, [initialFen, groundRef, config])
 
-  return (
-    <div className="App min-w-xs">
-      <a href="https://github.com/theborakompanioni/chess-wallet">
-        <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
-      </a>
+  return (<>
+    <a href="https://github.com/theborakompanioni/chess-wallet">
+      <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
+    </a>
+    <div className="App">
       <header className="App-container">
         <h1>Bitcoin Chess Wallet</h1>
         <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
 
-        <div className="mt-1">
+        <div className="mt-4">
           <button type="button" className="btn" onClick={() => randomizeFen()}>
             New
           </button>
@@ -195,7 +195,7 @@ function App() {
         </div>
       </header>
     </div>
-  )
+  </>)
 }
 
 export default App
