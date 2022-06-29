@@ -49,7 +49,8 @@ export const fenToBase13 = (fen: cg.FEN): Base13 => {
     return acc.replaceAll(key, value)
   }, fenAlphabetStringOrdered)
 
-  return base13
+  const base13OrEmpty = utils.removeStartChars(base13, '0')
+  return base13OrEmpty !== '' ? base13OrEmpty : '0'
 }
 
 export const fenToSha256 = (fen: cg.FEN): Base16 => utils.toSha256(utils.base16ToIntArray(fenToBase16(fen)))

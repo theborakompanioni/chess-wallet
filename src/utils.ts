@@ -12,6 +12,20 @@ export const toSha256 = (data: Uint8Array): Hex => {
 
 export const reverseString = (val: string): string => val.split('').reverse().join('')
 
+/** Removes the leading characters from a string. */
+export const removeStartChars = (str: string, char: string): string => {
+  return str.split('').reduce((() => {
+    let search = true
+    return (acc, it) => {
+      if (search && it === char) {
+        return acc
+      }
+      search = false
+      return acc + it
+    }
+  })(), '')
+}
+
 const bigIntPow = (() => {
   const ZERO = BigInt(0)
   const TWO = BigInt(2)

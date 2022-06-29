@@ -16,27 +16,39 @@ describe('fen.ts', () => {
     expect(test0).toBe('42365324111111110000000000000000000000000000000077777777a89cb98a')
 
     const test1 = fen.fenToBase13('8/8/8/8/8/8/8/8')
-    expect(test1).toBe('0000000000000000000000000000000000000000000000000000000000000000')
+    expect(test1).toBe('0')
 
-    const test2 = fen.fenToBase13('pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp')
-    expect(test2).toBe('1111111111111111111111111111111111111111111111111111111111111111')
+    const test2 = fen.fenToBase13('8/8/8/8/8/8/8/p7')
+    expect(test2).toBe('1')
 
-    const test3 = fen.fenToBase13('KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK')
-    expect(test3).toBe('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
+    const test3 = fen.fenToBase13('8/8/8/8/8/8/8/7p')
+    expect(test3).toBe('10000000')
+
+    const test4 = fen.fenToBase13('pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp')
+    expect(test4).toBe('1111111111111111111111111111111111111111111111111111111111111111')
+
+    const test5 = fen.fenToBase13('KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK')
+    expect(test5).toBe('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
   })
 
   it('should turn base13 to fen', () => {
     const test0 = fen.base13ToFen('42365324111111110000000000000000000000000000000077777777a89cb98a')
     expect(test0).toBe(fen.START_FEN)
 
-    const test1 = fen.base13ToFen('0000000000000000000000000000000000000000000000000000000000000000')
+    const test1 = fen.base13ToFen('0')
     expect(test1).toBe('8/8/8/8/8/8/8/8')
 
-    const test2 = fen.base13ToFen('1111111111111111111111111111111111111111111111111111111111111111')
-    expect(test2).toBe('pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp')
+    const test2 = fen.base13ToFen('1')
+    expect(test2).toBe('8/8/8/8/8/8/8/p7')
 
-    const test3 = fen.base13ToFen('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
-    expect(test3).toBe('KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK')
+    const test3 = fen.base13ToFen('10000000')
+    expect(test3).toBe('8/8/8/8/8/8/8/7p')
+
+    const test4 = fen.base13ToFen('1111111111111111111111111111111111111111111111111111111111111111')
+    expect(test4).toBe('pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp/pppppppp')
+
+    const test5 = fen.base13ToFen('cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
+    expect(test5).toBe('KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK/KKKKKKKK')
   })
 
   it('should turn fen to sha256', () => {

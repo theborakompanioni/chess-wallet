@@ -36,4 +36,14 @@ describe('utils.ts', () => {
     expect(sut.reverseString('0123456789')).toBe('9876543210')
   })
 
+  test('removeStartChars', () => {
+    expect(sut.removeStartChars('', '')).toBe('')
+    expect(sut.removeStartChars(' ', '')).toBe(' ')
+    expect(sut.removeStartChars('a', 'a')).toBe('')
+    expect(sut.removeStartChars('a', 'b')).toBe('a')
+    expect(sut.removeStartChars('     a', ' ')).toBe('a')
+    expect(sut.removeStartChars('0000001', '0')).toBe('1')
+    expect(sut.removeStartChars('0001000', '0')).toBe('1000')
+    expect(sut.removeStartChars('1000000', '0')).toBe('1000000')
+  })
 })
