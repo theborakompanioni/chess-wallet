@@ -5,7 +5,7 @@ import { Chessground } from 'chessground'
 import { Api as ChessgroundApi } from 'chessground/api'
 import * as cg from 'chessground/types'
 
-import { START_FEN, EMPTY_FEN, randomFen, fenToBase13, fenToBase16, fenToSha256 } from './fen'
+import { START_FEN, EMPTY_FEN, randomFen, fenToBigInt, bigIntToFen, fenToBase13, fenToBase16, fenToSha256 } from './fen'
 
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
@@ -70,7 +70,7 @@ function App() {
   ])[0]
   const [bitLength, setBitLength] = useState<BitLength | null>(null)
 
-  const [initialFen, setInitialFen] = useState<cg.FEN | null>(null)
+  const [initialFen, setInitialFen] = useState<cg.FEN>(randomFen())
   const fen = useMemo<cg.FEN | null>(
     () => (changeCounter >= 0 && ground ? ground.getFen() : null),
     [ground, changeCounter]
@@ -93,6 +93,7 @@ function App() {
   const randomizeFen = () => setInitialFen(randomFen())
   const startFen = () => setInitialFen(START_FEN)
   const emptyFen = () => setInitialFen(EMPTY_FEN)
+  const plusOneFen = () => setInitialFen((val) => bigIntToFen(fenToBigInt(val) + BigInt(1)))
 
   const config = useMemo(
     () => ({
@@ -108,7 +109,7 @@ function App() {
         enabled: true,
       },
       highlight: {
-        lastMove: false
+        lastMove: false,
       },
       events: {
         change: onChange,
@@ -150,6 +151,9 @@ function App() {
             </button>
             <button type="button" className="btn ml-1" onClick={() => emptyFen()}>
               Clear
+            </button>
+            <button type="button" className="btn ml-1" onClick={() => plusOneFen()}>
+              +1
             </button>
           </div>
 

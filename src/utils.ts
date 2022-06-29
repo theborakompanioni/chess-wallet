@@ -41,10 +41,10 @@ const bigIntPow = (() => {
   }
 })()
 
-const convertBaseBigInt = (() => {
+export const convertBaseBigInt = (() => {
   const RANGE = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
 
-  return (value: string, from_base: number, to_base: number) => {
+  return (value: string, from_base: number, to_base: number): string => {
     if (from_base < 2 || from_base > RANGE.length)
       throw new RangeError(`convertBase() from_base argument must be between 2 and ${RANGE.length}`)
     if (to_base < 2 || to_base > RANGE.length)

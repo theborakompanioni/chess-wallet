@@ -36,8 +36,6 @@ const toFenAlphabetString = (fen: cg.FEN): string => {
     .replaceAll('/', '')
 }
 
-export const fenToBase16 = (fen: cg.FEN): Base16 => utils.base13ToBase16(fenToBase13(fen))
-
 export const fenToBase13 = (fen: cg.FEN): Base13 => {
   const fenAlphabetString = toFenAlphabetString(fen)
 
@@ -53,8 +51,6 @@ export const fenToBase13 = (fen: cg.FEN): Base13 => {
   const base13OrEmpty = utils.removeStartChars(base13, '0')
   return base13OrEmpty !== '' ? base13OrEmpty : '0'
 }
-
-export const fenToSha256 = (fen: cg.FEN): Base16 => utils.toSha256(utils.base16ToIntArray(fenToBase16(fen)))
 
 export const base13ToFen = (base13: Base13): cg.FEN => {
   const base13_64: Base13 = base13.padStart(64, '0')
@@ -80,6 +76,13 @@ export const base13ToFen = (base13: Base13): cg.FEN => {
 
   return fen
 }
+
+export const fenToBigInt = (fen: cg.FEN): bigint => BigInt(utils.convertBaseBigInt(fenToBase13(fen), 13, 10))
+export const bigIntToFen = (val: BigInt): cg.FEN => base13ToFen(val.toString(13))
+
+export const fenToBase16 = (fen: cg.FEN): Base16 => fenToBigInt(fen).toString(16)
+
+export const fenToSha256 = (fen: cg.FEN): Base16 => utils.toSha256(utils.base16ToIntArray(fenToBase16(fen)))
 
 export const randomFen = () => {
   const random = randomBytes(32)
