@@ -107,6 +107,9 @@ function App() {
       drawable: {
         enabled: true,
       },
+      highlight: {
+        lastMove: false
+      },
       events: {
         change: onChange,
       },
