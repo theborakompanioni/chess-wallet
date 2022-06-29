@@ -26,4 +26,14 @@ describe('utils.ts', () => {
     expect(sut.base16ToBase13('deadbeef')).toBe('476cc321c')
     expect(sut.base16ToBase13('0123456789abcdef')).toBe('17a8c9b3017b847c')
   })
+
+  test('reverseString', () => {
+    expect(sut.reverseString('')).toBe('')
+    expect(sut.reverseString(' ')).toBe(' ')
+    expect(sut.reverseString('a')).toBe('a')
+    expect(sut.reverseString('  ')).toBe('  ')
+    expect(sut.reverseString('a ')).toBe(' a')
+    expect(sut.reverseString('0123456789')).toBe('9876543210')
+  })
+
 })
