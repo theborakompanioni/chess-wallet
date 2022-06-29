@@ -130,7 +130,7 @@ function App() {
 
   return (
     <>
-      <a href="https://github.com/theborakompanioni/chess-wallet">
+      <a href="https://github.com/theborakompanioni/chess-wallet" rel="noopener noreferrer">
         <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
       </a>
       <div className="App">
@@ -195,7 +195,9 @@ function App() {
           <div className="mt-1">
             <h2>Contribute</h2>
             <p>
-            <a href="https://github.com/theborakompanioni/chess-wallet">Fork me on GitHub</a>
+              <a href="https://github.com/theborakompanioni/chess-wallet" rel="noopener noreferrer">
+                Fork me on GitHub
+              </a>
             </p>
           </div>
         </header>
