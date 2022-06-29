@@ -6,6 +6,7 @@ import * as utils from './utils'
 import { Base13, Base16 } from './utils'
 
 export const START_FEN: cg.FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+export const EMPTY_FEN: cg.FEN = '8/8/8/8/8/8/8/8'
 
 // empty = ".", pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
 // White pieces are designated using uppercase letters ("PNBRQK"), while black pieces use lowercase letters ("pnbrqk").

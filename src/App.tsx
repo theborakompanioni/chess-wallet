@@ -5,7 +5,7 @@ import { Chessground } from 'chessground'
 import { Api as ChessgroundApi } from 'chessground/api'
 import * as cg from 'chessground/types'
 
-import { START_FEN, randomFen, fenToBase13, fenToBase16, fenToSha256 } from './fen'
+import { START_FEN, EMPTY_FEN, randomFen, fenToBase13, fenToBase16, fenToSha256 } from './fen'
 
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
@@ -92,6 +92,7 @@ function App() {
 
   const randomizeFen = () => setInitialFen(randomFen())
   const startFen = () => setInitialFen(START_FEN)
+  const emptyFen = () => setInitialFen(EMPTY_FEN)
 
   const config = useMemo(
     () => ({
@@ -144,6 +145,9 @@ function App() {
             <button type="button" className="btn ml-1" onClick={() => startFen()}>
               Start
             </button>
+            <button type="button" className="btn ml-1" onClick={() => emptyFen()}>
+              Clear
+            </button>
           </div>
 
           <div className="mt-1">
@@ -191,7 +195,7 @@ function App() {
           <div className="mt-1">
             <h2>Contribute</h2>
             <p>
-              Fork me on <a href="https://github.com/theborakompanioni/chess-wallet">GitHub</a>
+            <a href="https://github.com/theborakompanioni/chess-wallet">Fork me on GitHub</a>
             </p>
           </div>
         </header>

@@ -6,6 +6,10 @@ describe('fen.ts', () => {
     expect(fen.START_FEN).toBe('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
   })
 
+  it('should have correct "empty" fen', () => {
+    expect(fen.EMPTY_FEN).toBe('8/8/8/8/8/8/8/8')
+  })
+
   it('should create random fen', () => {
     const randomFen = fen.randomFen()
     expect(randomFen.split('').filter((char) => char === '/').length).toBe(7)
