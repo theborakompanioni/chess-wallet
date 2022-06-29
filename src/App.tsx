@@ -127,75 +127,77 @@ function App() {
     }
   }, [initialFen, groundRef, config])
 
-  return (<>
-    <a href="https://github.com/theborakompanioni/chess-wallet">
-      <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
-    </a>
-    <div className="App">
-      <header className="App-container">
-        <h1>Bitcoin Chess Wallet</h1>
-        <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
+  return (
+    <>
+      <a href="https://github.com/theborakompanioni/chess-wallet">
+        <img alt="Fork me on GitHub" title="Fork me on GitHub" src="fork_me.png" id="forkme" />
+      </a>
+      <div className="App">
+        <header className="App-container">
+          <h1>Bitcoin Chess Wallet</h1>
+          <div ref={groundRef} style={{ height: '400px', width: '400px' }}></div>
 
-        <div className="mt-4">
-          <button type="button" className="btn" onClick={() => randomizeFen()}>
-            New
-          </button>
-          <button type="button" className="btn ml-1" onClick={() => startFen()}>
-            Start
-          </button>
-        </div>
-
-        <div className="mt-1">
-          <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
-        </div>
-
-        <div className="mt-1">
-          <h2>Your seed:</h2>
-          <p className="mnemonic mono">
-            {words?.map((it, index) => (
-              <span key={index} className="mnemonic-word">
-                <span className="highlight">{it.substring(0, 4)}</span>
-                {it.length > 4 && it.substring(4, it.length)}
-                {index === words.length - 1 ? '' : ' '}
-              </span>
-            ))}
-          </p>
-        </div>
-
-        <div className={`details-container d-none`}>
-          <h2>FEN:</h2>
-          <p>{fen}</p>
-
-          <h2>FEN13:</h2>
-          <div className="code-container">
-            <code>{fen && fenToBase13(fen)}</code>
+          <div className="mt-4">
+            <button type="button" className="btn" onClick={() => randomizeFen()}>
+              New
+            </button>
+            <button type="button" className="btn ml-1" onClick={() => startFen()}>
+              Start
+            </button>
           </div>
 
-          <h2>FEN16:</h2>
-          <div className="code-container">
-            <code>{fen && fenToBase16(fen)}</code>
+          <div className="mt-1">
+            <BitLengthSelector bitLengths={bitLengths} onChange={setBitLength} />
           </div>
 
-          <h2>Entropy:</h2>
-          <div className="code-container">
-            <code>{entropy}</code>
+          <div className="mt-1">
+            <h2>Your seed:</h2>
+            <p className="mnemonic mono">
+              {words?.map((it, index) => (
+                <span key={index} className="mnemonic-word">
+                  <span className="highlight">{it.substring(0, 4)}</span>
+                  {it.length > 4 && it.substring(4, it.length)}
+                  {index === words.length - 1 ? '' : ' '}
+                </span>
+              ))}
+            </p>
           </div>
 
-          <h2>Seed:</h2>
-          <div className="code-container">
-            <code>{seed}</code>
-          </div>
-        </div>
+          <div className={`details-container d-none`}>
+            <h2>FEN:</h2>
+            <p>{fen}</p>
 
-        <div className="mt-1">
-          <h2>Contribute</h2>
-          <p>
-            Fork me on <a href="https://github.com/theborakompanioni/chess-wallet">GitHub</a>
-          </p>
-        </div>
-      </header>
-    </div>
-  </>)
+            <h2>FEN13:</h2>
+            <div className="code-container">
+              <code>{fen && fenToBase13(fen)}</code>
+            </div>
+
+            <h2>FEN16:</h2>
+            <div className="code-container">
+              <code>{fen && fenToBase16(fen)}</code>
+            </div>
+
+            <h2>Entropy:</h2>
+            <div className="code-container">
+              <code>{entropy}</code>
+            </div>
+
+            <h2>Seed:</h2>
+            <div className="code-container">
+              <code>{seed}</code>
+            </div>
+          </div>
+
+          <div className="mt-1">
+            <h2>Contribute</h2>
+            <p>
+              Fork me on <a href="https://github.com/theborakompanioni/chess-wallet">GitHub</a>
+            </p>
+          </div>
+        </header>
+      </div>
+    </>
+  )
 }
 
 export default App

@@ -14,16 +14,19 @@ export const reverseString = (val: string): string => val.split('').reverse().jo
 
 /** Removes the leading characters from a string. */
 export const removeStartChars = (str: string, char: string): string => {
-  return str.split('').reduce((() => {
-    let search = true
-    return (acc, it) => {
-      if (search && it === char) {
-        return acc
+  return str.split('').reduce(
+    (() => {
+      let search = true
+      return (acc, it) => {
+        if (search && it === char) {
+          return acc
+        }
+        search = false
+        return acc + it
       }
-      search = false
-      return acc + it
-    }
-  })(), '')
+    })(),
+    ''
+  )
 }
 
 const bigIntPow = (() => {
