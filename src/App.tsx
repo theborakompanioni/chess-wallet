@@ -93,7 +93,7 @@ function App() {
   const randomizeFen = () => setInitialFen(randomFen())
   const startFen = () => setInitialFen(START_FEN)
   const emptyFen = () => setInitialFen(EMPTY_FEN)
-  const plusOneFen = () => setInitialFen((val) => bigIntToFen(fenToBigInt(val) + BigInt(1)))
+  const plusOneFen = (fen: cg.FEN | null) => setInitialFen((initFen) => bigIntToFen(fenToBigInt(fen || initFen) + BigInt(1)))
 
   const config = useMemo(
     () => ({
@@ -152,7 +152,7 @@ function App() {
             <button type="button" className="btn ml-1" onClick={() => emptyFen()}>
               Clear
             </button>
-            <button type="button" className="btn ml-1" onClick={() => plusOneFen()}>
+            <button type="button" className="btn ml-1" onClick={() => plusOneFen(fen)}>
               +1
             </button>
           </div>
