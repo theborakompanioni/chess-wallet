@@ -2,6 +2,7 @@
   "name": "chess-bitcoin-wallet",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -9,7 +10,8 @@
     "eject": "react-scripts eject",
     "lint": "prettier --check --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
     "format": "prettier --write --no-error-on-unmatched-pattern 'src/**/*.{ts,tsx,json,css,md}'",
-    "postinstall": "node patch.js"
+    "postinstall": "node patch.js",
+    "gh-pages": "BUILD_PATH='./docs' npm run build"
   },
   "dependencies": {
     "@alephium/noble-secp256k1": "^1.5.5",
