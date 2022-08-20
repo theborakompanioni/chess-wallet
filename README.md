@@ -1,6 +1,7 @@
 
 <p align="center">
-    <img src="https://github.com/theborakompanioni/chess-wallet/raw/master/public/logo512.png" alt="Logo" width="256" />
+    <img src="https://github.com/theborakompanioni/chess-wallet/raw/master/src/logo-dark.svg#gh-light-mode-only" alt="Logo" width="256" />
+    <img src="https://github.com/theborakompanioni/chess-wallet/raw/master/src/logo-light.svg#gh-dark-mode-only" alt="Logo" width="256" />
 </p>
 
 Bitcoin Chess Wallet
