@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Buffer } from 'buffer'
 import * as BIP39 from 'bip39'
 import { Chessground } from 'chessground'
@@ -28,7 +28,7 @@ interface BitLengthSelectorProps {
 const BitLengthSelector = ({ bitLengths, onChange }: BitLengthSelectorProps) => {
   const [bitLength, setBitLength] = useState<BitLength>(bitLengths.filter((it) => it.enabled)[0])
 
-  const _onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const _onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const bits = parseInt(e.target.value, 10)
     const length = bitLengths.filter((it) => it.bits === bits)[0]
     setBitLength(length)
