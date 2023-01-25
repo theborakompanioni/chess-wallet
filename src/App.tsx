@@ -121,6 +121,8 @@ function App() {
 
   useEffect(() => {
     if (!groundRef || !groundRef.current) return
+    // needed for CI tests to work - no rendering in the tests!
+    if (typeof Chessground !== 'function') return
 
     const fen = initialFen || randomFen()
     const configWithFen = { ...config, fen }
