@@ -93,7 +93,8 @@ function App() {
   const randomizeFen = () => setInitialFen(randomFen())
   const startFen = () => setInitialFen(START_FEN)
   const emptyFen = () => setInitialFen(EMPTY_FEN)
-  const plusOneFen = (fen: cg.FEN | null) => setInitialFen((initFen) => bigIntToFen(fenToBigInt(fen || initFen) + BigInt(1)))
+  const plusOneFen = (fen: cg.FEN | null) =>
+    setInitialFen((initFen) => bigIntToFen(fenToBigInt(fen || initFen) + BigInt(1)))
 
   const config = useMemo(
     () => ({
