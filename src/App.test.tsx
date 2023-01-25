@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-describe('<Balance />', () => {
+describe('<App />', () => {
   it('should render an App heading', () => {
     render(<App />)
 
