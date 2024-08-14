@@ -25,7 +25,7 @@ export const removeStartChars = (str: string, char: string): string => {
         return acc + it
       }
     })(),
-    ''
+    '',
   )
 }
 

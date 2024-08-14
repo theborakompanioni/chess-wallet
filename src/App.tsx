@@ -73,13 +73,13 @@ function App() {
   const [initialFen, setInitialFen] = useState<cg.FEN>(randomFen())
   const fen = useMemo<cg.FEN | null>(
     () => (changeCounter >= 0 && ground ? ground.getFen() : null),
-    [ground, changeCounter]
+    [ground, changeCounter],
   )
 
   const fen16Hash = useMemo(() => fen && fenToSha256(fen), [fen])
   const entropy = useMemo<string | null>(
     () => fen16Hash && bitLength && fen16Hash.substring(fen16Hash.length - bitLength.bits / 4),
-    [fen16Hash, bitLength]
+    [fen16Hash, bitLength],
   )
 
   const mnemonic = useMemo<string | null>(() => entropy && BIP39.entropyToMnemonic(entropy), [entropy])
@@ -116,7 +116,7 @@ function App() {
         change: onChange,
       },
     }),
-    [onChange]
+    [onChange],
   )
 
   useEffect(() => {
